@@ -40,7 +40,11 @@ export async function transcribeAudio(file: File): Promise<string> {
 
   if (!response.ok || !data.success) {
     const errorMsg = data.error || `Upload failed with status ${response.status}`;
-    console.error("[Client] Transcribe API Error:", errorMsg);
+    if (response.status === 429 || errorMsg.includes("rate limit") || errorMsg.includes("Quota")) {
+      console.warn("[Client] Transcribe API Rate Limit Warning:", errorMsg);
+    } else {
+      console.error("[Client] Transcribe API Error:", errorMsg);
+    }
     throw new Error(errorMsg);
   }
 
@@ -76,7 +80,11 @@ export async function generateSlidesFromTranscript(
 
   if (!response.ok || !data.success) {
     const errorMsg = data.error || `Slide generation failed with status ${response.status}`;
-    console.error("[Client] Slide Generation API Error:", errorMsg);
+    if (response.status === 429 || errorMsg.includes("rate limit") || errorMsg.includes("Quota")) {
+      console.warn("[Client] Slide Generation API Rate Limit Warning:", errorMsg);
+    } else {
+      console.error("[Client] Slide Generation API Error:", errorMsg);
+    }
     throw new Error(errorMsg);
   }
 

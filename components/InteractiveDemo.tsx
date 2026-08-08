@@ -113,9 +113,14 @@ export default function InteractiveDemo() {
       showToast(`✅ Audio transcribed successfully! Review your transcript & click Generate Slides.`);
       setActiveTab("transcript");
     } catch (err: any) {
-      console.error("Errors:", err);
       setIsTranscribing(false);
-      showToast(`❌ Transcription failed: ${err.message || "Failed to process audio"}`);
+      if (err.message?.includes("rate limit") || err.message?.includes("Quota")) {
+        console.warn("[Transcribe Warning]", err.message);
+        showToast(`⏳ ${err.message}`);
+      } else {
+        console.error("Transcription Error:", err);
+        showToast(`❌ Transcription failed: ${err.message || "Failed to process audio"}`);
+      }
     }
   }, []);
 
