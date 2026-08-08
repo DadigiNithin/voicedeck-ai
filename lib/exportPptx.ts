@@ -1,97 +1,85 @@
 import pptxgen from "pptxgenjs";
 import { Slide } from "@/data/mockData";
 
-// Helper to generate elegant topic-specific SVG reference images
+// Helper to generate clean, transparent topic-specific SVG reference graphics
 function getSlideReferenceImageSVG(slide: Slide, index: number): string {
   const textLower = (slide.title + " " + (slide.bullets || []).join(" ")).toLowerCase();
 
-  let headerTitle = "REFERENCE GRAPHIC";
-  let primaryColor = "#8B5CF6";
+  let headerTitle = "SLIDE GRAPHIC";
+  let primaryColor = "#A855F7";
   let secondaryColor = "#3B82F6";
   let iconSvg = "";
 
-  if (textLower.includes("voice") || textLower.includes("audio") || textLower.includes("transcrib") || textLower.includes("speech")) {
-    headerTitle = "VOICE AI SPECTRUM & TRANSCRIPTION";
-    primaryColor = "#A855F7";
+  if (textLower.includes("voice") || textLower.includes("audio") || textLower.includes("transcrib") || textLower.includes("speech") || textLower.includes("interest")) {
+    headerTitle = "VOICE AI & TRANSCRIPTION";
+    primaryColor = "#C084FC";
     secondaryColor = "#EC4899";
     iconSvg = `
-      <path d="M120 160 L120 140 M140 180 L140 120 M160 200 L160 100 M180 220 L180 80 M200 240 L200 60 M220 220 L220 80 M240 200 L240 100 M260 180 L260 120 M280 160 L280 140" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="200" cy="150" r="85" stroke="${primaryColor}" stroke-width="3" fill="none" opacity="0.4"/>
+      <path d="M100 150 L100 130 M120 170 L120 110 M140 190 L140 90 M160 210 L160 70 M180 230 L180 50 M200 210 L200 70 M220 190 L220 90 M240 170 L240 110 M260 150 L260 130" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="180" cy="140" r="75" stroke="${primaryColor}" stroke-width="2.5" fill="none" opacity="0.5"/>
     `;
-  } else if (textLower.includes("x402") || textLower.includes("algo") || textLower.includes("payment") || textLower.includes("blockchain") || textLower.includes("wallet")) {
-    headerTitle = "ALGORAND x402 BLOCKCHAIN NODE";
+  } else if (textLower.includes("algo") || textLower.includes("payment") || textLower.includes("blockchain") || textLower.includes("wallet")) {
+    headerTitle = "ALGORAND x402 PROTOCOL";
     primaryColor = "#10B981";
     secondaryColor = "#3B82F6";
     iconSvg = `
-      <polygon points="200,60 290,110 290,210 200,260 110,210 110,110" fill="none" stroke="${primaryColor}" stroke-width="4"/>
-      <polygon points="200,90 260,125 260,195 200,230 140,195 140,125" fill="${primaryColor}" opacity="0.2" stroke="${secondaryColor}" stroke-width="2"/>
-      <text x="200" y="160" font-family="Times New Roman" font-size="22" font-weight="bold" fill="#FFFFFF" text-anchor="middle">0.1 ALGO</text>
+      <polygon points="180,40 260,85 260,175 180,220 100,175 100,85" fill="none" stroke="${primaryColor}" stroke-width="3.5"/>
+      <polygon points="180,65 235,95 235,165 180,195 125,165 125,95" fill="${primaryColor}" opacity="0.2" stroke="${secondaryColor}" stroke-width="2"/>
+      <text x="180" y="138" font-family="Times New Roman" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ALGO</text>
     `;
-  } else if (textLower.includes("slide") || textLower.includes("format") || textLower.includes("deck") || textLower.includes("present")) {
-    headerTitle = "SLIDE SYNTHESIS ARCHITECTURE";
+  } else if (textLower.includes("slide") || textLower.includes("format") || textLower.includes("deck") || textLower.includes("present") || textLower.includes("course") || textLower.includes("academic")) {
+    headerTitle = "ACADEMIC & AI ARCHITECTURE";
     primaryColor = "#F59E0B";
     secondaryColor = "#8B5CF6";
     iconSvg = `
-      <rect x="110" y="80" width="180" height="110" rx="8" fill="#1E293B" stroke="${primaryColor}" stroke-width="3"/>
-      <line x1="130" y1="110" x2="270" y2="110" stroke="#FFFFFF" stroke-width="4"/>
-      <line x1="130" y1="135" x2="230" y2="135" stroke="${secondaryColor}" stroke-width="3"/>
-      <line x1="130" y1="155" x2="250" y2="155" stroke="#94A3B8" stroke-width="3"/>
-      <circle cx="270" cy="210" r="30" fill="${primaryColor}"/>
-      <text x="270" y="217" font-family="Times New Roman" font-size="20" font-weight="bold" fill="#FFFFFF" text-anchor="middle">AI</text>
+      <rect x="90" y="60" width="180" height="110" rx="8" fill="#1E293B" stroke="${primaryColor}" stroke-width="2.5"/>
+      <line x1="110" y1="90" x2="250" y2="90" stroke="#FFFFFF" stroke-width="3"/>
+      <line x1="110" y1="115" x2="210" y2="115" stroke="${secondaryColor}" stroke-width="2.5"/>
+      <line x1="110" y1="135" x2="230" y2="135" stroke="#94A3B8" stroke-width="2.5"/>
+      <circle cx="240" cy="180" r="26" fill="${primaryColor}"/>
+      <text x="240" y="186" font-family="Times New Roman" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">AI</text>
     `;
-  } else if (textLower.includes("market") || textLower.includes("growth") || textLower.includes("business") || textLower.includes("revenue") || textLower.includes("roi")) {
-    headerTitle = "BUSINESS METRICS & ANALYTICS";
+  } else if (textLower.includes("market") || textLower.includes("growth") || textLower.includes("cgpa") || textLower.includes("score") || textLower.includes("metric") || textLower.includes("profile")) {
+    headerTitle = "PERFORMANCE METRICS";
     primaryColor = "#3B82F6";
     secondaryColor = "#10B981";
     iconSvg = `
-      <polyline points="110,220 160,170 210,190 270,110 310,80" fill="none" stroke="${secondaryColor}" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="310" cy="80" r="8" fill="${secondaryColor}"/>
-      <rect x="120" y="190" width="20" height="40" fill="${primaryColor}" opacity="0.6"/>
-      <rect x="170" y="170" width="20" height="60" fill="${primaryColor}" opacity="0.7"/>
-      <rect x="220" y="140" width="20" height="90" fill="${primaryColor}" opacity="0.8"/>
-      <rect x="270" y="100" width="20" height="130" fill="${primaryColor}"/>
+      <polyline points="90,190 140,140 190,160 250,80 280,50" fill="none" stroke="${secondaryColor}" stroke-width="4.5" stroke-linecap="round"/>
+      <circle cx="280" cy="50" r="7" fill="${secondaryColor}"/>
+      <rect x="100" y="160" width="18" height="40" fill="${primaryColor}" opacity="0.6"/>
+      <rect x="150" y="140" width="18" height="60" fill="${primaryColor}" opacity="0.7"/>
+      <rect x="200" y="110" width="18" height="90" fill="${primaryColor}" opacity="0.8"/>
+      <rect x="250" y="70" width="18" height="130" fill="${primaryColor}"/>
     `;
   } else {
-    headerTitle = `EXECUTIVE STRATEGY PILLAR #${index + 1}`;
+    headerTitle = `STRATEGY PILLAR #${index + 1}`;
     primaryColor = "#8B5CF6";
     secondaryColor = "#6366F1";
     iconSvg = `
-      <circle cx="200" cy="150" r="70" fill="none" stroke="${primaryColor}" stroke-width="4"/>
-      <polygon points="200,95 215,135 255,135 223,160 235,200 200,175 165,200 177,160 145,135 185,135" fill="${secondaryColor}" opacity="0.8"/>
+      <circle cx="180" cy="130" r="60" fill="none" stroke="${primaryColor}" stroke-width="3.5"/>
+      <polygon points="180,80 193,115 230,115 200,138 211,173 180,150 149,173 160,138 130,115 167,115" fill="${secondaryColor}" opacity="0.85"/>
     `;
   }
 
   const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="500" height="380" viewBox="0 0 500 380">
-      <defs>
-        <linearGradient id="bgGrad${index}" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#1E293B"/>
-          <stop offset="100%" stop-color="#0F172A"/>
-        </linearGradient>
-        <linearGradient id="cardBorder${index}" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="${primaryColor}"/>
-          <stop offset="100%" stop-color="${secondaryColor}"/>
-        </linearGradient>
-      </defs>
+    <svg xmlns="http://www.w3.org/2000/svg" width="360" height="280" viewBox="0 0 360 280">
+      <!-- Outer Card with dark slate background matching presentation theme -->
+      <rect x="5" y="5" width="350" height="270" rx="12" fill="#0F172A" stroke="${primaryColor}" stroke-width="2"/>
       
-      <!-- Container Background Box -->
-      <rect x="10" y="10" width="480" height="360" rx="16" fill="url(#bgGrad${index})" stroke="url(#cardBorder${index})" stroke-width="3"/>
-      
-      <!-- Top Title Tag Accent -->
-      <rect x="30" y="30" width="440" height="40" rx="8" fill="#334155" opacity="0.5"/>
-      <text x="250" y="55" font-family="Times New Roman" font-size="15" font-weight="bold" fill="#F8FAFC" text-anchor="middle" letter-spacing="1.5">
+      <!-- Top Title Tag -->
+      <rect x="20" y="20" width="320" height="32" rx="6" fill="#1E293B"/>
+      <text x="180" y="41" font-family="Times New Roman" font-size="12" font-weight="bold" fill="#E2E8F0" text-anchor="middle">
         ${headerTitle}
       </text>
 
-      <!-- Center Graphic Art -->
-      <g transform="translate(50, 20)">
+      <!-- Center Icon -->
+      <g transform="translate(0, 10)">
         ${iconSvg}
       </g>
 
-      <!-- Footer Emblem Text -->
-      <rect x="30" y="310" width="440" height="36" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
-      <text x="250" y="333" font-family="Times New Roman" font-size="13" font-style="italic" fill="#94A3B8" text-anchor="middle">
-        Slide ${index + 1} Visual Reference • VoiceDeck AI Synthesis
+      <!-- Footer Emblem -->
+      <text x="180" y="255" font-family="Times New Roman" font-size="11" font-style="italic" fill="#94A3B8" text-anchor="middle">
+        Slide ${index + 1} Visual Reference • VoiceDeck AI
       </text>
     </svg>
   `;
@@ -99,41 +87,28 @@ function getSlideReferenceImageSVG(slide: Slide, index: number): string {
   return "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
 }
 
-// Generate Cover Slide Image SVG
-function getTitleSlideReferenceImageSVG(title: string, subtitle?: string): string {
+// Generate Cover Slide Graphic SVG
+function getTitleSlideReferenceImageSVG(title: string): string {
   const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="550" height="400" viewBox="0 0 550 400">
-      <defs>
-        <linearGradient id="titleBg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#1E1B4B"/>
-          <stop offset="50%" stop-color="#0F172A"/>
-          <stop offset="100%" stop-color="#020617"/>
-        </linearGradient>
-        <linearGradient id="titleGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#A855F7"/>
-          <stop offset="100%" stop-color="#3B82F6"/>
-        </linearGradient>
-      </defs>
-
-      <!-- Background Card Box -->
-      <rect x="10" y="10" width="530" height="380" rx="20" fill="url(#titleBg)" stroke="#4C1D95" stroke-width="3"/>
+    <svg xmlns="http://www.w3.org/2000/svg" width="380" height="320" viewBox="0 0 380 320">
+      <!-- Dark Slate Background Box matching slide theme -->
+      <rect x="5" y="5" width="370" height="310" rx="16" fill="#0F172A" stroke="#7C3AED" stroke-width="2"/>
       
       <!-- Glowing Hexagon Network Emblem -->
-      <polygon points="275,70 380,130 380,250 275,310 170,250 170,130" fill="none" stroke="url(#titleGlow)" stroke-width="4"/>
-      <polygon points="275,100 350,145 350,235 275,280 200,235 200,145" fill="url(#titleGlow)" opacity="0.15" stroke="#7C3AED" stroke-width="2"/>
+      <polygon points="190,45 280,95 280,195 190,245 100,195 100,95" fill="none" stroke="#A855F7" stroke-width="3"/>
+      <polygon points="190,70 255,108 255,182 190,220 125,182 125,108" fill="#7C3AED" opacity="0.25" stroke="#3B82F6" stroke-width="1.5"/>
 
       <!-- Center Icon -->
-      <circle cx="275" cy="190" r="50" fill="#7C3AED" opacity="0.8"/>
-      <text x="275" y="202" font-family="Times New Roman" font-size="34" font-weight="bold" fill="#FFFFFF" text-anchor="middle">🎙️</text>
+      <circle cx="190" cy="145" r="38" fill="#7C3AED" opacity="0.9"/>
+      <text x="190" y="155" font-family="Times New Roman" font-size="28" font-weight="bold" fill="#FFFFFF" text-anchor="middle">🎙️</text>
 
-      <!-- Decorative Waveforms -->
-      <path d="M 40 190 Q 110 130 170 190 T 275 190 T 380 190 T 510 190" fill="none" stroke="#A855F7" stroke-width="3" opacity="0.6"/>
-      <path d="M 40 190 Q 110 240 170 190 T 275 190 T 380 190 T 510 190" fill="none" stroke="#3B82F6" stroke-width="2" opacity="0.5"/>
+      <!-- Waveforms -->
+      <path d="M 20 145 Q 80 95 130 145 T 190 145 T 250 145 T 360 145" fill="none" stroke="#A855F7" stroke-width="2.5" opacity="0.7"/>
 
-      <!-- Bottom Banner -->
-      <rect x="40" y="325" width="470" height="40" rx="8" fill="#1E293B" stroke="#334155" stroke-width="1"/>
-      <text x="275" y="350" font-family="Times New Roman" font-size="14" font-weight="bold" fill="#E2E8F0" text-anchor="middle">
-        VOICEDECK AI • EXECUTIVE PRESENTATION DECK
+      <!-- Bottom Tag -->
+      <rect x="30" y="260" width="320" height="32" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+      <text x="190" y="281" font-family="Times New Roman" font-size="12" font-weight="bold" fill="#E2E8F0" text-anchor="middle">
+        VOICEDECK AI PRESENTATION
       </text>
     </svg>
   `;
@@ -141,7 +116,7 @@ function getTitleSlideReferenceImageSVG(title: string, subtitle?: string): strin
   return "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
 }
 
-// Build PowerPoint Presentation instance with strictly Times New Roman typography and reference graphics
+// Build PowerPoint Presentation instance with strictly Times New Roman typography and clean layout
 export async function buildPptxInstance(
   slides: Slide[],
   title?: string,
@@ -157,22 +132,13 @@ export async function buildPptxInstance(
 
   // 1. TITLE SLIDE
   const titleSlide = pptx.addSlide();
-  titleSlide.background = { color: "0F172A" }; // Deep Slate/Navy
+  titleSlide.background = { color: "0F172A" }; // 100% Slate Navy slide background
 
-  // Top header accent line
-  titleSlide.addShape(pptx.ShapeType.rect, {
-    x: 0,
-    y: 0,
-    w: "100%",
-    h: 0.15,
-    fill: { color: "7C3AED" },
-  });
-
-  // Left Column: Title & Subtitle Info Box
+  // Left Column: Presentation Title & Subtitle (Strictly within slide bounds)
   titleSlide.addText(title || "Generated Presentation", {
     x: 0.8,
-    y: 1.8,
-    w: 6.5,
+    y: 1.5,
+    w: 7.2,
     h: 1.8,
     fontSize: 34,
     bold: true,
@@ -185,55 +151,38 @@ export async function buildPptxInstance(
   if (subtitle) {
     titleSlide.addText(subtitle, {
       x: 0.8,
-      y: 3.8,
-      w: 6.5,
-      h: 1.0,
+      y: 3.5,
+      w: 7.2,
+      h: 1.2,
       fontSize: 18,
       italic: true,
       color: "C084FC",
       fontFace: FONT_TIMES,
       align: "left",
+      valign: "top",
     });
   }
 
-  // Title Slide Metadata Box
-  titleSlide.addShape(pptx.ShapeType.roundRect, {
+  // Title Slide Metadata Text
+  titleSlide.addText("Generated by VoiceDeck AI  •  Executive Presentation Layout", {
     x: 0.8,
-    y: 5.2,
-    w: 6.5,
-    h: 1.2,
-    fill: { color: "1E293B" },
-    line: { color: "334155", width: 1 },
-    rectRadius: 0.08,
+    y: 5.4,
+    w: 7.2,
+    h: 0.5,
+    fontSize: 13,
+    color: "94A3B8",
+    fontFace: FONT_TIMES,
   });
 
-  titleSlide.addText(
-    [
-      { text: "Synthesized by: ", options: { bold: true, color: "94A3B8" } },
-      { text: "VoiceDeck AI (Gemini 2.5 + Algorand x402)\n", options: { color: "E2E8F0" } },
-      { text: "Typography: ", options: { bold: true, color: "94A3B8" } },
-      { text: "Times New Roman Executive Layout", options: { color: "C084FC" } },
-    ],
-    {
-      x: 1.0,
-      y: 5.3,
-      w: 6.1,
-      h: 1.0,
-      fontSize: 12,
-      fontFace: FONT_TIMES,
-      valign: "middle",
-    }
-  );
-
-  // Right Column: Title Slide Reference Image Graphic
+  // Right Column: Title Slide Reference Graphic (Cleanly bounded inside 4.2 x 3.5 in)
   try {
-    const titleImageSvg = getTitleSlideReferenceImageSVG(title || "Presentation", subtitle);
+    const titleImageSvg = getTitleSlideReferenceImageSVG(title || "Presentation");
     titleSlide.addImage({
       data: titleImageSvg,
-      x: 7.6,
+      x: 8.4,
       y: 1.6,
-      w: 5.0,
-      h: 4.8,
+      w: 4.2,
+      h: 3.5,
     });
   } catch (e) {
     console.error("Error adding title slide image:", e);
@@ -242,9 +191,9 @@ export async function buildPptxInstance(
   // Footer on Title Slide
   titleSlide.addText("VoiceDeck AI  |  Executive Presentation", {
     x: 0.8,
-    y: 7.0,
+    y: 6.8,
     w: 11.7,
-    h: 0.4,
+    h: 0.3,
     fontSize: 10,
     color: "64748B",
     fontFace: FONT_TIMES,
@@ -253,16 +202,7 @@ export async function buildPptxInstance(
   // 2. INDIVIDUAL CONTENT SLIDES
   (slides || []).forEach((slideData, index) => {
     const slide = pptx.addSlide();
-    slide.background = { color: "0F172A" };
-
-    // Top purple accent strip
-    slide.addShape(pptx.ShapeType.rect, {
-      x: 0,
-      y: 0,
-      w: "100%",
-      h: 0.12,
-      fill: { color: "7C3AED" },
-    });
+    slide.background = { color: "0F172A" }; // Clean 100% slide background
 
     // Icon & Slide Title
     const slideTitleText = slideData.icon
@@ -271,7 +211,7 @@ export async function buildPptxInstance(
 
     slide.addText(slideTitleText, {
       x: 0.8,
-      y: 0.5,
+      y: 0.6,
       w: 11.7,
       h: 0.7,
       fontSize: 24,
@@ -284,31 +224,19 @@ export async function buildPptxInstance(
     if (slideData.subtitle) {
       slide.addText(slideData.subtitle, {
         x: 0.8,
-        y: 1.2,
+        y: 1.3,
         w: 11.7,
         h: 0.4,
         fontSize: 15,
         italic: true,
-        color: "A855F7",
+        color: "C084FC",
         fontFace: FONT_TIMES,
       });
     }
 
-    const cardY = slideData.subtitle ? 1.7 : 1.4;
-    const cardH = slideData.subtitle ? 4.8 : 5.1;
+    const contentY = slideData.subtitle ? 1.8 : 1.5;
 
-    // LEFT COLUMN: Bullet points card container (W: 6.4 in)
-    slide.addShape(pptx.ShapeType.roundRect, {
-      x: 0.8,
-      y: cardY,
-      w: 6.4,
-      h: cardH,
-      fill: { color: "1E293B" },
-      line: { color: "334155", width: 1 },
-      rectRadius: 0.08,
-    });
-
-    // Bullet items formatting in Times New Roman
+    // LEFT COLUMN: Bullet points (Strictly within W: 7.2 in)
     if (slideData.bullets && slideData.bullets.length > 0) {
       const textRows = slideData.bullets.map((bullet) => ({
         text: bullet,
@@ -316,37 +244,37 @@ export async function buildPptxInstance(
           fontSize: 15,
           color: "F1F5F9",
           breakLine: true,
-          spaceBefore: 12,
+          spaceBefore: 10,
           bullet: true,
           fontFace: FONT_TIMES,
         },
       }));
 
       slide.addText(textRows, {
-        x: 1.1,
-        y: cardY + 0.3,
-        w: 5.8,
-        h: cardH - 0.6,
+        x: 0.8,
+        y: contentY,
+        w: 7.2,
+        h: 4.6,
         valign: "top",
       });
     }
 
-    // RIGHT COLUMN: Embedded Reference Image Box (W: 5.0 in, X: 7.5 in)
+    // RIGHT COLUMN: Embedded Reference Image (Strictly bounded inside W: 4.2 in, X: 8.4 in)
     try {
       const refImageSvg = getSlideReferenceImageSVG(slideData, index);
       slide.addImage({
         data: refImageSvg,
-        x: 7.5,
-        y: cardY,
-        w: 5.0,
-        h: cardH - 0.4,
+        x: 8.4,
+        y: contentY,
+        w: 4.2,
+        h: 3.3,
       });
 
       // Caption label below reference image
-      slide.addText(`Figure ${index + 1}: Slide Reference Graphic`, {
-        x: 7.5,
-        y: cardY + cardH - 0.35,
-        w: 5.0,
+      slide.addText(`Figure ${index + 1}: Slide Visual Reference`, {
+        x: 8.4,
+        y: contentY + 3.4,
+        w: 4.2,
         h: 0.3,
         fontSize: 11,
         italic: true,
@@ -366,9 +294,9 @@ export async function buildPptxInstance(
     // Slide Footer
     slide.addText(`VoiceDeck AI  |  Slide ${index + 1} of ${slides.length}`, {
       x: 0.8,
-      y: 7.0,
+      y: 6.8,
       w: 11.7,
-      h: 0.4,
+      h: 0.3,
       fontSize: 10,
       color: "64748B",
       fontFace: FONT_TIMES,
