@@ -31,12 +31,6 @@ export async function POST(req: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-3.6-flash",
-      generationConfig: {
-        responseMimeType: "application/json",
-      },
-    });
 
     const prompt = `
 You are a World-Class Executive Presentation Designer and AI Architect.
@@ -86,51 +80,78 @@ RULES:
 5. Do NOT invent fake data or use generic filler. Extract real information, metrics, goals, and facts directly from the transcript.
 `;
 
-    console.log("[Generate Slides API] Sending request to Gemini API...");
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text().trim();
+    const candidateModels = [
+      "gemini-2.5-flash",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+      "gemini-flash-latest",
+    ];
 
-    console.log("[Generate Slides API] Gemini response received. Raw response length:", responseText.length);
+    let responseText = "";
+    let lastError: any = null;
+
+    for (const modelName of candidateModels) {
+      try {
+        console.log(`[Generate Slides API] Sending request to Gemini model: ${modelName}`);
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          generationConfig: {
+            responseMimeType: "application/json",
+          },
+        });
+        const result = await model.generateContent(prompt);
+        responseText = result.response.text().trim();
+        if (responseText) {
+          console.log(`[Generate Slides API] Slide generation succeeded with model ${modelName}. Length: ${responseText.length}`);
+          break;
+        }
+      } catch (err: any) {
+        console.warn(`[Generate Slides API] Model ${modelName} failed:`, err.message);
+        lastError = err;
+      }
+    }
 
     let parsedData: any = null;
-    try {
-      parsedData = JSON.parse(responseText);
-    } catch (parseErr) {
-      console.error("[Generate Slides API] Initial JSON parse error:", parseErr);
-      const cleanText = responseText
-        .replace(/^```json\s*/i, "")
-        .replace(/^```\s*/i, "")
-        .replace(/\s*```$/i, "");
-
+    if (responseText) {
       try {
-        parsedData = JSON.parse(cleanText);
-      } catch (cleanErr) {
-        const match = responseText.match(/\{[\s\S]*\}/);
-        if (match) {
-          try {
-            parsedData = JSON.parse(match[0]);
-          } catch (mErr) {
-            console.error("[Generate Slides API] Regex match JSON parse error:", mErr);
+        parsedData = JSON.parse(responseText);
+      } catch (parseErr) {
+        console.error("[Generate Slides API] Initial JSON parse error:", parseErr);
+        const cleanText = responseText
+          .replace(/^```json\s*/i, "")
+          .replace(/^```\s*/i, "")
+          .replace(/\s*```$/i, "");
+
+        try {
+          parsedData = JSON.parse(cleanText);
+        } catch (cleanErr) {
+          const match = responseText.match(/\{[\s\S]*\}/);
+          if (match) {
+            try {
+              parsedData = JSON.parse(match[0]);
+            } catch (mErr) {
+              console.error("[Generate Slides API] Regex match JSON parse error:", mErr);
+            }
           }
         }
       }
     }
 
     if (!parsedData || !parsedData.slides || !Array.isArray(parsedData.slides) || parsedData.slides.length === 0) {
-      console.warn("[Generate Slides API] Warning: Gemini returned invalid JSON structure, generating structured fallback slides.");
+      console.warn("[Generate Slides API] Warning: Gemini output unavailable or rate-limited, generating structured fallback slides.");
       parsedData = {
-        presentationTitle: "Executive Summary",
+        presentationTitle: "Executive Presentation Deck",
         presentationSubtitle: "Synthesized from Transcript",
-        agenda: ["Key Takeaways", "Overview", "Action Plan"],
+        agenda: ["Key Takeaways", "Overview & Context", "Action Plan & Next Steps"],
         slides: [
           {
             id: 1,
             title: "Transcript Analysis & Overview",
             subtitle: "Key Highlights",
             bullets: [
-              transcript.substring(0, 100) + "...",
-              "Generated structured presentation deck based on provided input audio/text.",
-              "Ready for export to PPTX and executive presentation."
+              transcript.substring(0, 120) + "...",
+              "Generated structured presentation deck based on input recording/text.",
+              "Ready for review and direct export to PPTX PowerPoint presentation."
             ],
             speakerNotes: "Overview slide generated from transcript.",
             icon: "📊",

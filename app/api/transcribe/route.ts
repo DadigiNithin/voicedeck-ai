@@ -68,34 +68,60 @@ export async function POST(req: NextRequest) {
     console.log("[Transcribe API] Sending Gemini API request with mimeType:", mimeType);
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
-
     const prompt =
       "You are an expert audio transcription system. Please provide an accurate, complete verbatim text transcription of all spoken words in this recording. Do not summarize, skip, or add meta commentary. Output ONLY the transcribed text.";
 
-    const result = await model.generateContent([
-      {
-        inlineData: {
-          mimeType,
-          data: base64Data,
-        },
-      },
-      { text: prompt },
-    ]);
+    // Fallback model list if primary encounters quota rate limits
+    const candidateModels = [
+      "gemini-2.5-flash",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+      "gemini-flash-latest",
+    ];
 
-    const response = await result.response;
-    const rawTranscript = response.text().trim();
+    let rawTranscript = "";
+    let lastError: any = null;
 
-    console.log("[Transcribe API] Gemini response received. Transcript length:", rawTranscript.length);
-    console.log("[Transcribe API] Transcript output snippet:", rawTranscript.substring(0, 150) + "...");
+    for (const modelName of candidateModels) {
+      try {
+        console.log(`[Transcribe API] Trying model: ${modelName}`);
+        const model = genAI.getGenerativeModel({ model: modelName });
+
+        const result = await model.generateContent([
+          {
+            inlineData: {
+              mimeType,
+              data: base64Data,
+            },
+          },
+          { text: prompt },
+        ]);
+
+        const response = await result.response;
+        rawTranscript = response.text().trim();
+
+        if (rawTranscript) {
+          console.log(`[Transcribe API] Transcription succeeded with model ${modelName}. Length: ${rawTranscript.length}`);
+          break;
+        }
+      } catch (err: any) {
+        console.warn(`[Transcribe API] Model ${modelName} failed:`, err.message);
+        lastError = err;
+      }
+    }
 
     if (!rawTranscript) {
+      const isQuota = lastError?.message?.includes("429") || lastError?.message?.includes("Quota");
+      const userMessage = isQuota
+        ? "Gemini API rate limit reached. Please wait ~30 seconds before retrying audio upload."
+        : lastError?.message || "Gemini returned an empty transcript for this audio file.";
+
       return NextResponse.json(
         {
           success: false,
-          error: "Gemini returned an empty transcript for this audio file.",
+          error: userMessage,
         },
-        { status: 422 }
+        { status: isQuota ? 429 : 500 }
       );
     }
 
@@ -107,12 +133,15 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     console.error("[Transcribe API] Error processing audio transcription:", error);
+    const isQuota = error.message?.includes("429") || error.message?.includes("Quota");
     return NextResponse.json(
       {
         success: false,
-        error: error.message || "Failed to transcribe audio file using Gemini API.",
+        error: isQuota
+          ? "Gemini API rate limit reached. Please wait ~30 seconds before uploading again."
+          : error.message || "Failed to transcribe audio file using Gemini API.",
       },
-      { status: 500 }
+      { status: isQuota ? 429 : 500 }
     );
   }
 }
