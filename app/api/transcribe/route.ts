@@ -71,11 +71,9 @@ export async function POST(req: NextRequest) {
     const prompt =
       "You are an expert audio transcription system. Please provide an accurate, complete verbatim text transcription of all spoken words in this recording. Do not summarize, skip, or add meta commentary. Output ONLY the transcribed text.";
 
-    // Fallback model list if primary encounters quota rate limits
+    // Active working models
     const candidateModels = [
       "gemini-2.5-flash",
-      "gemini-2.0-flash",
-      "gemini-1.5-flash",
       "gemini-flash-latest",
     ];
 
