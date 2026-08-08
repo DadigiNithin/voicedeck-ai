@@ -1,6 +1,25 @@
 import pptxgen from "pptxgenjs";
 import { Slide } from "@/data/mockData";
 
+// Safe SVG to Base64 data URI encoder for both Browser and Node environments
+function svgToBase64(svg: string): string {
+  // Ensure all & are properly XML-escaped as &amp; if not already escaped
+  const cleanSvg = svg.replace(/&(?!amp;|lt;|gt;|quot;|apos;)/g, "&amp;");
+
+  if (typeof window !== "undefined") {
+    try {
+      const encoded = encodeURIComponent(cleanSvg).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+        String.fromCharCode(parseInt(p1, 16))
+      );
+      return "data:image/svg+xml;base64," + btoa(encoded);
+    } catch (e) {
+      console.error("Browser SVG base64 encoding error:", e);
+    }
+  }
+
+  return "data:image/svg+xml;base64," + Buffer.from(cleanSvg, "utf-8").toString("base64");
+}
+
 // Helper to generate clean, transparent topic-specific SVG reference graphics
 function getSlideReferenceImageSVG(slide: Slide, index: number): string {
   const textLower = (slide.title + " " + (slide.bullets || []).join(" ")).toLowerCase();
@@ -11,7 +30,7 @@ function getSlideReferenceImageSVG(slide: Slide, index: number): string {
   let iconSvg = "";
 
   if (textLower.includes("voice") || textLower.includes("audio") || textLower.includes("transcrib") || textLower.includes("speech") || textLower.includes("interest")) {
-    headerTitle = "VOICE AI & TRANSCRIPTION";
+    headerTitle = "VOICE AI &amp; TRANSCRIPTION";
     primaryColor = "#C084FC";
     secondaryColor = "#EC4899";
     iconSvg = `
@@ -28,7 +47,7 @@ function getSlideReferenceImageSVG(slide: Slide, index: number): string {
       <text x="180" y="138" font-family="Times New Roman" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ALGO</text>
     `;
   } else if (textLower.includes("slide") || textLower.includes("format") || textLower.includes("deck") || textLower.includes("present") || textLower.includes("course") || textLower.includes("academic")) {
-    headerTitle = "ACADEMIC & AI ARCHITECTURE";
+    headerTitle = "ACADEMIC &amp; AI ARCHITECTURE";
     primaryColor = "#F59E0B";
     secondaryColor = "#8B5CF6";
     iconSvg = `
@@ -63,49 +82,33 @@ function getSlideReferenceImageSVG(slide: Slide, index: number): string {
 
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="360" height="280" viewBox="0 0 360 280">
-      <!-- Outer Card with dark slate background matching presentation theme -->
       <rect x="5" y="5" width="350" height="270" rx="12" fill="#0F172A" stroke="${primaryColor}" stroke-width="2"/>
-      
-      <!-- Top Title Tag -->
       <rect x="20" y="20" width="320" height="32" rx="6" fill="#1E293B"/>
       <text x="180" y="41" font-family="Times New Roman" font-size="12" font-weight="bold" fill="#E2E8F0" text-anchor="middle">
         ${headerTitle}
       </text>
-
-      <!-- Center Icon -->
       <g transform="translate(0, 10)">
         ${iconSvg}
       </g>
-
-      <!-- Footer Emblem -->
       <text x="180" y="255" font-family="Times New Roman" font-size="11" font-style="italic" fill="#94A3B8" text-anchor="middle">
-        Slide ${index + 1} Visual Reference • VoiceDeck AI
+        Slide ${index + 1} Visual Reference - VoiceDeck AI
       </text>
     </svg>
   `;
 
-  return "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+  return svgToBase64(svg);
 }
 
 // Generate Cover Slide Graphic SVG
 function getTitleSlideReferenceImageSVG(title: string): string {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="380" height="320" viewBox="0 0 380 320">
-      <!-- Dark Slate Background Box matching slide theme -->
       <rect x="5" y="5" width="370" height="310" rx="16" fill="#0F172A" stroke="#7C3AED" stroke-width="2"/>
-      
-      <!-- Glowing Hexagon Network Emblem -->
       <polygon points="190,45 280,95 280,195 190,245 100,195 100,95" fill="none" stroke="#A855F7" stroke-width="3"/>
       <polygon points="190,70 255,108 255,182 190,220 125,182 125,108" fill="#7C3AED" opacity="0.25" stroke="#3B82F6" stroke-width="1.5"/>
-
-      <!-- Center Icon -->
       <circle cx="190" cy="145" r="38" fill="#7C3AED" opacity="0.9"/>
-      <text x="190" y="155" font-family="Times New Roman" font-size="28" font-weight="bold" fill="#FFFFFF" text-anchor="middle">🎙️</text>
-
-      <!-- Waveforms -->
+      <text x="190" y="155" font-family="Times New Roman" font-size="28" font-weight="bold" fill="#FFFFFF" text-anchor="middle">AI</text>
       <path d="M 20 145 Q 80 95 130 145 T 190 145 T 250 145 T 360 145" fill="none" stroke="#A855F7" stroke-width="2.5" opacity="0.7"/>
-
-      <!-- Bottom Tag -->
       <rect x="30" y="260" width="320" height="32" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
       <text x="190" y="281" font-family="Times New Roman" font-size="12" font-weight="bold" fill="#E2E8F0" text-anchor="middle">
         VOICEDECK AI PRESENTATION
@@ -113,7 +116,7 @@ function getTitleSlideReferenceImageSVG(title: string): string {
     </svg>
   `;
 
-  return "data:image/svg+xml;base64," + Buffer.from(svg).toString("base64");
+  return svgToBase64(svg);
 }
 
 // Build PowerPoint Presentation instance with strictly Times New Roman typography and clean layout
@@ -132,9 +135,8 @@ export async function buildPptxInstance(
 
   // 1. TITLE SLIDE
   const titleSlide = pptx.addSlide();
-  titleSlide.background = { color: "0F172A" }; // 100% Slate Navy slide background
+  titleSlide.background = { color: "0F172A" };
 
-  // Left Column: Presentation Title & Subtitle (Strictly within slide bounds)
   titleSlide.addText(title || "Generated Presentation", {
     x: 0.8,
     y: 1.5,
@@ -163,8 +165,7 @@ export async function buildPptxInstance(
     });
   }
 
-  // Title Slide Metadata Text
-  titleSlide.addText("Generated by VoiceDeck AI  •  Executive Presentation Layout", {
+  titleSlide.addText("Generated by VoiceDeck AI - Executive Presentation Layout", {
     x: 0.8,
     y: 5.4,
     w: 7.2,
@@ -174,7 +175,6 @@ export async function buildPptxInstance(
     fontFace: FONT_TIMES,
   });
 
-  // Right Column: Title Slide Reference Graphic (Cleanly bounded inside 4.2 x 3.5 in)
   try {
     const titleImageSvg = getTitleSlideReferenceImageSVG(title || "Presentation");
     titleSlide.addImage({
@@ -188,8 +188,7 @@ export async function buildPptxInstance(
     console.error("Error adding title slide image:", e);
   }
 
-  // Footer on Title Slide
-  titleSlide.addText("VoiceDeck AI  |  Executive Presentation", {
+  titleSlide.addText("VoiceDeck AI | Executive Presentation", {
     x: 0.8,
     y: 6.8,
     w: 11.7,
@@ -202,11 +201,10 @@ export async function buildPptxInstance(
   // 2. INDIVIDUAL CONTENT SLIDES
   (slides || []).forEach((slideData, index) => {
     const slide = pptx.addSlide();
-    slide.background = { color: "0F172A" }; // Clean 100% slide background
+    slide.background = { color: "0F172A" };
 
-    // Icon & Slide Title
     const slideTitleText = slideData.icon
-      ? `${slideData.icon}  ${slideData.title}`
+      ? `${slideData.icon} ${slideData.title}`
       : slideData.title;
 
     slide.addText(slideTitleText, {
@@ -220,7 +218,6 @@ export async function buildPptxInstance(
       fontFace: FONT_TIMES,
     });
 
-    // Subtitle if available
     if (slideData.subtitle) {
       slide.addText(slideData.subtitle, {
         x: 0.8,
@@ -236,7 +233,6 @@ export async function buildPptxInstance(
 
     const contentY = slideData.subtitle ? 1.8 : 1.5;
 
-    // LEFT COLUMN: Bullet points (Strictly within W: 7.2 in)
     if (slideData.bullets && slideData.bullets.length > 0) {
       const textRows = slideData.bullets.map((bullet) => ({
         text: bullet,
@@ -259,7 +255,6 @@ export async function buildPptxInstance(
       });
     }
 
-    // RIGHT COLUMN: Embedded Reference Image (Strictly bounded inside W: 4.2 in, X: 8.4 in)
     try {
       const refImageSvg = getSlideReferenceImageSVG(slideData, index);
       slide.addImage({
@@ -270,7 +265,6 @@ export async function buildPptxInstance(
         h: 3.3,
       });
 
-      // Caption label below reference image
       slide.addText(`Figure ${index + 1}: Slide Visual Reference`, {
         x: 8.4,
         y: contentY + 3.4,
@@ -286,13 +280,11 @@ export async function buildPptxInstance(
       console.error(`Error adding reference image to slide ${index + 1}:`, e);
     }
 
-    // Speaker Notes
     if (slideData.speakerNotes) {
       slide.addNotes(slideData.speakerNotes);
     }
 
-    // Slide Footer
-    slide.addText(`VoiceDeck AI  |  Slide ${index + 1} of ${slides.length}`, {
+    slide.addText(`VoiceDeck AI | Slide ${index + 1} of ${slides.length}`, {
       x: 0.8,
       y: 6.8,
       w: 11.7,
