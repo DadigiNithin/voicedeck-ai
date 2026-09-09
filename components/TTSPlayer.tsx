@@ -81,10 +81,10 @@ export default function TTSPlayer({
           whileTap={{ scale: 0.95 }}
           onClick={handleTogglePlay}
           disabled={isLoading}
-          className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md ${
+          className={`px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer ${
             isPlaying
-              ? "bg-red-500 hover:bg-red-600 text-white animate-pulse"
-              : "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white"
+              ? "bg-red-600 hover:bg-red-700 text-white animate-pulse"
+              : "bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] text-white"
           }`}
         >
           {isLoading ? (
@@ -102,7 +102,7 @@ export default function TTSPlayer({
 
   return (
     <div
-      className={`bg-white/[0.04] border border-white/10 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md ${className}`}
+      className={`bg-[#FFFDF7] border border-[#6D28D9]/10 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md shadow-sm ${className}`}
     >
       <div className="flex items-center gap-2.5">
         <motion.button
@@ -110,10 +110,10 @@ export default function TTSPlayer({
           whileTap={{ scale: 0.95 }}
           onClick={handleTogglePlay}
           disabled={isLoading}
-          className={`w-9 h-9 rounded-lg flex items-center justify-center text-white transition-all shadow-lg ${
+          className={`w-9 h-9 rounded-2xl flex items-center justify-center text-white transition-all shadow-sm cursor-pointer ${
             isPlaying
-              ? "bg-red-500 hover:bg-red-600 shadow-red-500/30"
-              : "bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-500/30"
+              ? "bg-red-600 hover:bg-red-700 shadow-red-600/30"
+              : "bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] shadow-[#6D28D9]/20"
           }`}
         >
           {isLoading ? (
@@ -126,16 +126,16 @@ export default function TTSPlayer({
         </motion.button>
 
         <div>
-          <div className="text-white text-xs font-semibold flex items-center gap-1.5">
+          <div className="text-[#35115F] text-xs font-bold flex items-center gap-1.5">
             {isPlaying ? (
-              <span className="text-green-400 flex items-center gap-1">
+              <span className="text-emerald-700 flex items-center gap-1 font-bold">
                 <Volume2 className="w-3.5 h-3.5 animate-bounce" /> Speaking…
               </span>
             ) : (
               <span>{title}</span>
             )}
           </div>
-          <div className="text-gray-400 text-[11px]">
+          <div className="text-[#5C4E4E] text-[11px] font-medium">
             {isPlaying ? "Click to stop narration" : "Click to read text aloud"}
           </div>
         </div>
@@ -156,7 +156,7 @@ export default function TTSPlayer({
                 repeatType: "reverse",
                 ease: "easeInOut",
               }}
-              className="w-1 bg-gradient-to-t from-purple-500 to-blue-400 rounded-full"
+              className="w-1 bg-gradient-to-t from-[#6D28D9] to-[#7C3AED] rounded-full"
             />
           ))}
         </div>
@@ -168,7 +168,7 @@ export default function TTSPlayer({
         <select
           value={speechRate}
           onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
-          className="bg-black/40 border border-white/10 text-gray-300 text-xs rounded-lg px-2 py-1 outline-none font-mono"
+          className="bg-[#FFF8E8] border border-[#6D28D9]/15 text-[#35115F] text-xs rounded-xl px-2 py-1 outline-none font-mono font-medium cursor-pointer shadow-sm"
         >
           <option value={0.8}>0.8x</option>
           <option value={1.0}>1.0x</option>
@@ -179,14 +179,14 @@ export default function TTSPlayer({
         {/* Gemini Enhancement Toggle */}
         <button
           onClick={() => setUseGeminiNarration(!useGeminiNarration)}
-          className={`px-2.5 py-1 rounded-lg text-xs font-medium border flex items-center gap-1 transition-all ${
+          className={`px-2.5 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 transition-all cursor-pointer shadow-sm ${
             useGeminiNarration
-              ? "bg-purple-500/20 border-purple-500/60 text-purple-300"
-              : "bg-white/5 border-white/10 text-gray-400 hover:text-white"
+              ? "bg-[#EDE3FF] border-[#6D28D9]/30 text-[#35115F]"
+              : "bg-white border-[#6D28D9]/10 text-[#5C4E4E] hover:text-[#211A1A]"
           }`}
           title="Enhance narration script with Gemini AI"
         >
-          <Sparkles className="w-3 h-3 text-purple-400" />
+          <Sparkles className="w-3 h-3 text-[#6D28D9]" />
           AI Script
         </button>
       </div>

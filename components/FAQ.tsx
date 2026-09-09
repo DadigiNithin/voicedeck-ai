@@ -9,8 +9,8 @@ export default function FAQ() {
   const [openId, setOpenId] = useState<number | null>(null);
 
   return (
-    <section className="py-24 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(139,92,246,0.06),transparent_60%)] pointer-events-none" />
+    <section className="py-24 relative bg-[#FFF8E8]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(109,40,217,0.06),transparent_60%)] pointer-events-none" />
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -20,17 +20,17 @@ export default function FAQ() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-sm font-medium mb-6">
-            <HelpCircle className="w-3.5 h-3.5" />
-            Got Questions?
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#EDE3FF] text-[#35115F] text-xs font-mono font-bold uppercase tracking-widest mb-4 shadow-sm border border-[#6D28D9]/10">
+            <HelpCircle className="w-3.5 h-3.5 text-[#6D28D9]" />
+            SUPPORT & FAQ // GOT QUESTIONS?
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#211A1A] mb-4 tracking-tight">
             Frequently Asked{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#35115F] via-[#6D28D9] to-[#7C3AED] bg-clip-text text-transparent">
               Questions
             </span>
           </h2>
-          <p className="text-gray-400 text-lg">
+          <p className="text-[#5C4E4E] text-lg font-medium">
             Everything you need to know about VoiceDeck AI.
           </p>
         </motion.div>
@@ -44,21 +44,21 @@ export default function FAQ() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.07 }}
-              className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-colors"
+              className="bg-[#FFFDF7] border border-[#6D28D9]/10 rounded-3xl overflow-hidden hover:border-[#7C3AED]/30 transition-colors shadow-sm"
             >
               <button
                 onClick={() => setOpenId(openId === faq.id ? null : faq.id)}
-                className="w-full flex items-center justify-between gap-4 px-5 sm:px-6 py-4 sm:py-5 text-left"
+                className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left cursor-pointer"
               >
-                <span className="text-white font-medium text-sm sm:text-base leading-relaxed">
+                <span className="text-[#35115F] font-bold text-sm sm:text-base leading-relaxed">
                   {faq.question}
                 </span>
                 <motion.div
                   animate={{ rotate: openId === faq.id ? 180 : 0 }}
                   transition={{ duration: 0.25 }}
-                  className="flex-shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center"
+                  className="flex-shrink-0 w-7 h-7 rounded-full bg-[#EDE3FF] flex items-center justify-center text-[#6D28D9]"
                 >
-                  <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+                  <ChevronDown className="w-4 h-4" />
                 </motion.div>
               </button>
 
@@ -70,8 +70,8 @@ export default function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                   >
-                    <div className="px-5 sm:px-6 pb-5 pt-1 border-t border-white/10">
-                      <p className="text-gray-400 text-sm leading-relaxed">{faq.answer}</p>
+                    <div className="px-6 pb-5 pt-1 border-t border-[#6D28D9]/10">
+                      <p className="text-[#5C4E4E] text-sm leading-relaxed font-medium">{faq.answer}</p>
                     </div>
                   </motion.div>
                 )}
@@ -87,12 +87,12 @@ export default function FAQ() {
           viewport={{ once: true }}
           className="mt-12 text-center"
         >
-          <p className="text-gray-500 text-sm mb-4">
+          <p className="text-[#5C4E4E] text-sm mb-4 font-medium">
             Still have questions?
           </p>
           <button
             onClick={() => window.location.href = "mailto:support@voicedeck.ai"}
-            className="px-6 py-3 rounded-xl border border-white/20 hover:border-purple-500/50 text-gray-300 hover:text-white text-sm font-medium transition-all hover:bg-purple-500/10"
+            className="px-6 py-3 rounded-full border border-[#6D28D9]/20 hover:border-[#6D28D9]/40 text-[#6D28D9] hover:text-[#5B21B6] text-xs font-bold uppercase tracking-wider transition-all bg-white hover:bg-[#EDE3FF]/50 shadow-sm cursor-pointer"
           >
             Contact Support →
           </button>

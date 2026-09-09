@@ -22,7 +22,6 @@ import { generateSlidesFromTranscript, transcribeAudio } from "@/lib/slideGenera
 import { downloadPresentationAsPptx } from "@/lib/exportPptx";
 import { sleep } from "@/lib/utils";
 import TTSPlayer from "@/components/TTSPlayer";
-import X402PaymentModal from "@/components/X402PaymentModal";
 
 type Tab = "transcript" | "upload" | "record";
 
@@ -54,8 +53,6 @@ export default function InteractiveDemo() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [generatingProgress, setGeneratingProgress] = useState(0);
   const [isDownloadingPpt, setIsDownloadingPpt] = useState(false);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [confirmedTxId, setConfirmedTxId] = useState<string | null>(null);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const recordTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -194,14 +191,6 @@ export default function InteractiveDemo() {
       clearInterval(tick);
       setIsGenerating(false);
     }
-  };
-
-  // ── Handle Payment Success Callback ───────────────────────────────────────
-  const handlePaymentSuccess = (txId: string) => {
-    setConfirmedTxId(txId);
-    setShowPaymentModal(false);
-    showToast("✅ Payment Verified On-Chain! Generating slides…");
-    handleGenerate();
   };
 
   // ── Clear ─────────────────────────────────────────────────────────────────
@@ -344,9 +333,9 @@ export default function InteractiveDemo() {
   ];
 
   return (
-    <section id="demo" className="py-24 relative">
+    <section id="demo" className="py-24 relative bg-[#FFF8E8]">
       {/* Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(139,92,246,0.08),transparent_60%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(109,40,217,0.06),transparent_60%)] pointer-events-none" />
 
       {/* Toast */}
       <AnimatePresence>
@@ -355,7 +344,7 @@ export default function InteractiveDemo() {
             initial={{ opacity: 0, y: 40, x: "-50%" }}
             animate={{ opacity: 1, y: 0, x: "-50%" }}
             exit={{ opacity: 0, y: 20, x: "-50%" }}
-            className="fixed bottom-8 left-1/2 z-[100] bg-white/10 backdrop-blur-xl border border-white/20 text-white text-sm font-medium px-5 py-3 rounded-2xl shadow-2xl"
+            className="fixed bottom-8 left-1/2 z-[100] bg-[#211A1A] text-[#FFF8E8] text-sm font-medium px-5 py-3 rounded-full shadow-2xl border border-[#6D28D9]/20"
           >
             {toastMessage}
           </motion.div>
@@ -370,19 +359,15 @@ export default function InteractiveDemo() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#EDE3FF] text-[#6D28D9] text-xs font-mono font-bold uppercase tracking-widest mb-4 shadow-sm border border-[#6D28D9]/10">
             <Presentation className="w-3.5 h-3.5" />
-            Try It Live
+            INTERACTIVE STUDIO // LIVE AI ENGINE
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Interactive{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Demo
-            </span>
+          <h2 className="font-display text-3xl sm:text-5xl font-black text-[#211A1A] mb-4 uppercase tracking-tight">
+            INTERACTIVE <span className="bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] bg-clip-text text-transparent">DEMO</span>
           </h2>
-          <p className="text-gray-400 text-lg">
-            Upload audio, record your voice, or paste a transcript — watch VoiceDeck generate
-            slides instantly.
+          <p className="text-[#5C4E4E] text-base sm:text-lg font-sans max-w-xl mx-auto font-medium">
+            Upload audio, record your voice, or paste raw transcripts — watch VoiceDeck AI synthesize executive slide decks in real-time.
           </p>
         </motion.div>
 
@@ -393,43 +378,37 @@ export default function InteractiveDemo() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden flex flex-col"
+            className="bg-[#FFFDF7] border border-[#6D28D9]/15 rounded-3xl overflow-hidden flex flex-col shadow-xl"
           >
             {/* Tab Bar */}
-            <div className="flex border-b border-white/10 bg-white/[0.02]">
+            <div className="flex border-b border-[#6D28D9]/10 bg-[#FFF8E8]/60 p-1.5 gap-1">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-medium transition-all relative ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-bold uppercase tracking-wider transition-all rounded-2xl cursor-pointer ${
                     activeTab === tab.id
-                      ? "text-white"
-                      : "text-gray-500 hover:text-gray-300"
+                      ? "bg-white text-[#35115F] shadow-sm"
+                      : "text-[#5C4E4E] hover:text-[#211A1A]"
                   }`}
                 >
                   <tab.icon className="w-3.5 h-3.5" />
                   {tab.label}
-                  {activeTab === tab.id && (
-                    <motion.div
-                      layoutId="tab-indicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500"
-                    />
-                  )}
                 </button>
               ))}
             </div>
 
-            <div className="p-5 flex-1 flex flex-col">
+            <div className="p-6 flex-1 flex flex-col">
               {/* ── Transcript Tab ── */}
               {activeTab === "transcript" && (
                 <div className="flex flex-col flex-1 gap-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-500 text-xs">
+                    <span className="text-[#6E5D5D] text-xs font-medium">
                       {transcript.length} characters
                     </span>
                     <div className="flex gap-2">
                       {transcript.length > 0 && (
-                        <span className="text-green-400 text-xs flex items-center gap-1">
+                        <span className="text-emerald-700 text-xs font-bold flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3" /> Ready to generate
                         </span>
                       )}
@@ -440,7 +419,7 @@ export default function InteractiveDemo() {
                     value={transcript}
                     onChange={(e) => setTranscript(e.target.value)}
                     placeholder={`Paste your meeting transcript here…\n\nExample: Today's meeting discussed quarterly revenue growth, marketing budget increase, hiring plans and future roadmap.`}
-                    className="flex-1 w-full min-h-[200px] bg-black/30 border border-white/10 rounded-xl text-gray-200 placeholder-gray-600 text-sm leading-relaxed resize-none focus:outline-none focus:border-purple-500/50 font-mono p-4 transition-colors"
+                    className="flex-1 w-full min-h-[200px] bg-[#FFF8E8]/60 border border-[#6D28D9]/15 rounded-2xl text-[#211A1A] placeholder-[#9E8B8B] text-sm leading-relaxed resize-none focus:outline-none focus:border-[#6D28D9] font-mono p-4 transition-colors shadow-inner"
                   />
 
                   {/* TTS Player for Transcript */}
@@ -453,23 +432,23 @@ export default function InteractiveDemo() {
 
                   {/* Uploaded file badge */}
                   {uploadedFile && (
-                    <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-green-500/10 border border-green-500/30">
+                    <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl bg-emerald-600/10 border border-emerald-600/20">
                       {uploadedFile.type.startsWith("video/") ? (
-                        <FileVideo className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <FileVideo className="w-4 h-4 text-emerald-700 flex-shrink-0" />
                       ) : (
-                        <FileAudio className="w-4 h-4 text-green-400 flex-shrink-0" />
+                        <FileAudio className="w-4 h-4 text-emerald-700 flex-shrink-0" />
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm text-green-300 font-medium truncate">
+                        <div className="text-sm text-emerald-900 font-semibold truncate">
                           {uploadedFile.name}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-[#5C4E4E]">
                           {formatBytes(uploadedFile.size)} · Transcribed ✓
                         </div>
                       </div>
                       <button
                         onClick={() => setUploadedFile(null)}
-                        className="text-gray-500 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
+                        className="text-[#6E5D5D] hover:text-red-700 p-1 rounded-full hover:bg-black/5 transition-colors flex-shrink-0 cursor-pointer"
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>
@@ -483,7 +462,7 @@ export default function InteractiveDemo() {
                       disabled={!transcript.trim() || isGenerating || isTranscribing}
                       whileHover={{ scale: transcript.trim() ? 1.02 : 1 }}
                       whileTap={{ scale: transcript.trim() ? 0.98 : 1 }}
-                      className="flex-1 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 transition-all text-sm"
+                      className="flex-1 py-3.5 rounded-full font-bold text-white bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] hover:from-[#5B21B6] hover:to-[#6D28D9] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#6D28D9]/20 flex items-center justify-center gap-2 transition-all text-xs uppercase tracking-wider cursor-pointer"
                     >
                       {isTranscribing ? (
                         <>
@@ -507,7 +486,7 @@ export default function InteractiveDemo() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       title="Clear all"
-                      className="px-4 py-3 rounded-xl border border-white/20 hover:border-red-500/50 text-gray-400 hover:text-red-400 transition-all"
+                      className="px-4 py-3.5 rounded-full border border-[#6D28D9]/15 hover:border-red-600/50 text-[#5C4E4E] hover:text-red-700 bg-white transition-all cursor-pointer shadow-sm"
                     >
                       <Trash2 className="w-4 h-4" />
                     </motion.button>
@@ -524,39 +503,39 @@ export default function InteractiveDemo() {
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onClick={() => fileRef.current?.click()}
-                    className={`flex-1 min-h-[220px] border-2 border-dashed rounded-2xl flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-200 ${
+                    className={`flex-1 min-h-[220px] border-2 border-dashed rounded-3xl flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-200 ${
                       isDragging
-                        ? "border-purple-500 bg-purple-500/10 scale-[1.01]"
-                        : "border-white/20 hover:border-purple-500/60 hover:bg-purple-500/5"
+                        ? "border-[#6D28D9] bg-[#EDE3FF]/50 scale-[1.01]"
+                        : "border-[#6D28D9]/20 hover:border-[#6D28D9]/50 hover:bg-[#FFF8E8]/70 bg-[#FFF8E8]/30"
                     }`}
                   >
                     {isTranscribing ? (
                       <div className="flex flex-col items-center gap-3">
                         <div className="relative">
-                          <div className="w-14 h-14 rounded-full border-2 border-purple-500/30 animate-ping absolute inset-0" />
-                          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative">
+                          <div className="w-14 h-14 rounded-full border-2 border-[#6D28D9]/30 animate-ping absolute inset-0" />
+                          <div className="w-14 h-14 rounded-full bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] flex items-center justify-center relative shadow-md">
                             <Loader2 className="w-6 h-6 text-white animate-spin" />
                           </div>
                         </div>
                         <div className="text-center">
-                          <p className="text-white font-semibold text-sm">
+                          <p className="text-[#211A1A] font-bold text-sm">
                             Transcribing audio…
                           </p>
-                          <p className="text-gray-500 text-xs mt-1">
+                          <p className="text-[#5C4E4E] text-xs mt-1 font-medium">
                             Converting your audio to text
                           </p>
                         </div>
                       </div>
                     ) : uploadedFile ? (
                       <div className="flex flex-col items-center gap-3 text-center px-6">
-                        <div className="w-14 h-14 rounded-2xl bg-green-500/20 border border-green-500/30 flex items-center justify-center">
-                          <CheckCircle2 className="w-7 h-7 text-green-400" />
+                        <div className="w-14 h-14 rounded-2xl bg-emerald-600/10 border border-emerald-600/20 flex items-center justify-center">
+                          <CheckCircle2 className="w-7 h-7 text-emerald-700" />
                         </div>
                         <div>
-                          <p className="text-white font-semibold text-sm">
+                          <p className="text-[#211A1A] font-bold text-sm">
                             {uploadedFile.name}
                           </p>
-                          <p className="text-gray-500 text-xs mt-1">
+                          <p className="text-[#5C4E4E] text-xs mt-1 font-medium">
                             {formatBytes(uploadedFile.size)} · Transcript ready
                           </p>
                         </div>
@@ -564,7 +543,7 @@ export default function InteractiveDemo() {
                           <audio
                             src={uploadedFile.url}
                             controls
-                            className="w-full max-w-xs mt-2 rounded-lg"
+                            className="w-full max-w-xs mt-2 rounded-2xl"
                             onClick={(e) => e.stopPropagation()}
                           />
                         )}
@@ -572,7 +551,7 @@ export default function InteractiveDemo() {
                           <video
                             src={uploadedFile.url}
                             controls
-                            className="w-full max-w-xs mt-2 rounded-lg"
+                            className="w-full max-w-xs mt-2 rounded-2xl"
                             onClick={(e) => e.stopPropagation()}
                           />
                         )}
@@ -582,24 +561,24 @@ export default function InteractiveDemo() {
                             setUploadedFile(null);
                             setTranscript("");
                           }}
-                          className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors mt-1"
+                          className="text-xs text-red-700 hover:text-red-900 flex items-center gap-1 transition-colors mt-1 font-semibold cursor-pointer"
                         >
-                          <X className="w-3 h-3" /> Remove file
+                          <X className="w-3.5 h-3.5" /> Remove file
                         </button>
                       </div>
                     ) : (
                       <>
-                        <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-                          <Upload className="w-8 h-8 text-purple-400" />
+                        <div className="w-16 h-16 rounded-2xl bg-[#EDE3FF] flex items-center justify-center text-[#6D28D9]">
+                          <Upload className="w-8 h-8" />
                         </div>
                         <div className="text-center px-6">
-                          <p className="text-white font-semibold text-sm">
+                          <p className="text-[#211A1A] font-bold text-sm">
                             {isDragging ? "Drop your file here" : "Drop audio / video here"}
                           </p>
-                          <p className="text-gray-500 text-xs mt-1">
+                          <p className="text-[#5C4E4E] text-xs mt-1 font-medium">
                             or click to browse · MP3, WAV, MP4, M4A, OGG, WebM
                           </p>
-                          <p className="text-gray-600 text-xs mt-0.5">up to 500 MB</p>
+                          <p className="text-[#6E5D5D] text-xs mt-0.5 font-mono">up to 500 MB</p>
                         </div>
                       </>
                     )}
@@ -620,7 +599,7 @@ export default function InteractiveDemo() {
                       (fmt) => (
                         <span
                           key={fmt}
-                          className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-gray-500 text-xs font-mono"
+                          className="px-3 py-1 rounded-full bg-white border border-[#6D28D9]/10 text-[#5C4E4E] text-xs font-mono font-medium shadow-sm"
                         >
                           .{fmt.toLowerCase()}
                         </span>
@@ -634,7 +613,7 @@ export default function InteractiveDemo() {
                       onClick={() => setActiveTab("transcript")}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 text-sm"
+                      className="w-full py-3.5 rounded-full font-bold text-white bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] flex items-center justify-center gap-2 shadow-lg shadow-[#6D28D9]/20 text-xs uppercase tracking-wider cursor-pointer"
                     >
                       <Zap className="w-4 h-4" />
                       Generate Slides from Transcript
@@ -650,15 +629,15 @@ export default function InteractiveDemo() {
                   <div className="relative">
                     {isRecording && (
                       <>
-                        <div className="absolute inset-0 rounded-full bg-red-500/20 animate-ping scale-150" />
-                        <div className="absolute inset-0 rounded-full bg-red-500/10 animate-ping scale-125 animation-delay-150" />
+                        <div className="absolute inset-0 rounded-full bg-red-600/20 animate-ping scale-150" />
+                        <div className="absolute inset-0 rounded-full bg-red-600/10 animate-ping scale-125 animation-delay-150" />
                       </>
                     )}
                     <div
-                      className={`relative w-24 h-24 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 ${
+                      className={`relative w-24 h-24 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 ${
                         isRecording
-                          ? "bg-gradient-to-br from-red-500 to-rose-600 shadow-red-500/30"
-                          : "bg-gradient-to-br from-purple-600 to-blue-600 shadow-purple-500/30"
+                          ? "bg-gradient-to-br from-red-600 to-rose-700 shadow-red-600/30"
+                          : "bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] shadow-[#6D28D9]/30"
                       }`}
                     >
                       <Mic className="w-10 h-10 text-white" />
@@ -669,20 +648,20 @@ export default function InteractiveDemo() {
                   <div className="text-center">
                     {isRecording ? (
                       <>
-                        <div className="text-4xl font-bold text-white font-mono">
+                        <div className="text-4xl font-bold text-[#211A1A] font-mono">
                           {formatTime(recordingTime)}
                         </div>
-                        <div className="text-red-400 text-sm mt-1 flex items-center justify-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                        <div className="text-red-700 text-sm mt-1 flex items-center justify-center gap-1.5 font-semibold">
+                          <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
                           Recording…
                         </div>
                       </>
                     ) : (
                       <>
-                        <div className="text-white font-semibold text-base">
+                        <div className="text-[#211A1A] font-bold text-base">
                           Record Your Meeting
                         </div>
-                        <div className="text-gray-500 text-sm mt-1">
+                        <div className="text-[#5C4E4E] text-sm mt-1 font-medium">
                           Click the button below to start recording
                         </div>
                       </>
@@ -695,7 +674,7 @@ export default function InteractiveDemo() {
                       onClick={stopRecording}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-red-600 hover:bg-red-500 shadow-lg shadow-red-500/30 transition-all"
+                      className="flex items-center gap-2 px-6 py-3 rounded-full font-bold text-white bg-red-600 hover:bg-red-700 shadow-md shadow-red-600/30 transition-all cursor-pointer text-xs uppercase tracking-wider"
                     >
                       <Square className="w-4 h-4 fill-current" />
                       Stop Recording
@@ -703,16 +682,16 @@ export default function InteractiveDemo() {
                   ) : (
                     <motion.button
                       onClick={startRecording}
-                      whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(139,92,246,0.4)" }}
+                      whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(109,40,217,0.3)" }}
                       whileTap={{ scale: 0.95 }}
-                      className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-purple-500/30 transition-all"
+                      className="flex items-center gap-2 px-6 py-3.5 rounded-full font-bold text-white bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] shadow-lg shadow-[#6D28D9]/20 transition-all cursor-pointer text-xs uppercase tracking-wider"
                     >
                       <Play className="w-4 h-4 fill-current" />
                       Start Recording
                     </motion.button>
                   )}
 
-                  <div className="flex items-center gap-2 text-gray-600 text-xs">
+                  <div className="flex items-center gap-2 text-[#6E5D5D] text-xs font-medium">
                     <AlertCircle className="w-3.5 h-3.5" />
                     Requires microphone permission
                   </div>
@@ -726,22 +705,22 @@ export default function InteractiveDemo() {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden flex flex-col"
+            className="bg-[#FFFDF7] border border-[#6D28D9]/15 rounded-3xl overflow-hidden flex flex-col shadow-xl"
           >
             {/* Panel Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-white/[0.02] flex-shrink-0">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#6D28D9]/10 bg-[#FFF8E8]/60 flex-shrink-0">
               <div className="flex items-center gap-2">
-                <Presentation className="w-4 h-4 text-blue-400" />
-                <span className="text-white font-medium text-sm">Live Preview</span>
+                <Presentation className="w-4 h-4 text-[#6D28D9]" />
+                <span className="text-[#35115F] font-bold text-sm">Live Preview</span>
               </div>
               {slides.length > 0 && (
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-blue-300 bg-blue-500/10 border border-blue-500/30 px-2.5 py-1 rounded-full">
+                  <span className="text-xs text-[#35115F] bg-[#EDE3FF] border border-[#6D28D9]/10 px-3 py-1 rounded-full font-bold">
                     {slides.length} slides generated
                   </span>
                   <button
                     onClick={handleClear}
-                    className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                    className="p-1.5 text-[#6E5D5D] hover:text-red-700 hover:bg-black/5 rounded-full transition-colors cursor-pointer"
                     title="Clear results"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -755,26 +734,26 @@ export default function InteractiveDemo() {
               {isGenerating && (
                 <div className="flex flex-col items-center justify-center h-64 gap-5">
                   <div className="relative">
-                    <div className="w-16 h-16 rounded-full border-2 border-purple-500/30 animate-ping absolute inset-0" />
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative">
+                    <div className="w-16 h-16 rounded-full border-2 border-[#6D28D9]/30 animate-ping absolute inset-0" />
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] flex items-center justify-center relative shadow-md">
                       <Zap className="w-7 h-7 text-white" />
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-white font-semibold mb-1">Processing…</div>
-                    <div className="text-gray-400 text-sm">
+                    <div className="text-[#211A1A] font-bold mb-1">Processing…</div>
+                    <div className="text-[#5C4E4E] text-sm font-medium">
                       Analyzing transcript and generating slides
                     </div>
                   </div>
                   <div className="w-48 space-y-1">
-                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                    <div className="flex justify-between text-xs text-[#6E5D5D] mb-1 font-mono">
                       <span>Progress</span>
                       <span>{generatingProgress}%</span>
                     </div>
-                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-black/5 rounded-full overflow-hidden">
                       <motion.div
                         animate={{ width: `${generatingProgress}%` }}
-                        className="h-full rounded-full bg-gradient-to-r from-purple-500 to-blue-500"
+                        className="h-full rounded-full bg-gradient-to-r from-[#6D28D9] to-[#7C3AED]"
                         transition={{ duration: 0.3 }}
                       />
                     </div>
@@ -786,23 +765,23 @@ export default function InteractiveDemo() {
               {isTranscribing && !isGenerating && (
                 <div className="flex flex-col items-center justify-center h-64 gap-4">
                   <div className="relative">
-                    <div className="w-16 h-16 rounded-full border-2 border-blue-500/30 animate-ping absolute inset-0" />
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center relative">
+                    <div className="w-16 h-16 rounded-full border-2 border-[#6D28D9]/30 animate-ping absolute inset-0" />
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] flex items-center justify-center relative shadow-md">
                       <Mic className="w-7 h-7 text-white" />
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-white font-semibold mb-1">Transcribing Audio…</div>
-                    <div className="text-gray-400 text-sm">
+                    <div className="text-[#211A1A] font-bold mb-1">Transcribing Audio…</div>
+                    <div className="text-[#5C4E4E] text-sm font-medium">
                       Converting speech to text
                     </div>
                   </div>
-                  <div className="w-48 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div className="w-48 h-1.5 bg-black/5 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: "0%" }}
                       animate={{ width: "70%" }}
                       transition={{ duration: 2.5, ease: "easeOut" as const }}
-                      className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"
+                      className="h-full rounded-full bg-gradient-to-r from-[#6D28D9] to-[#7C3AED]"
                     />
                   </div>
                 </div>
@@ -811,14 +790,14 @@ export default function InteractiveDemo() {
               {/* ── Empty State ── */}
               {!isGenerating && !isTranscribing && slides.length === 0 && (
                 <div className="flex flex-col items-center justify-center h-64 gap-4 text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
-                    <Presentation className="w-8 h-8 text-gray-600" />
+                  <div className="w-16 h-16 rounded-2xl bg-[#EDE3FF] flex items-center justify-center shadow-sm text-[#6D28D9]">
+                    <Presentation className="w-8 h-8" />
                   </div>
                   <div>
-                    <div className="text-gray-400 font-medium mb-1">No slides generated yet</div>
-                    <div className="text-gray-600 text-sm max-w-xs">
+                    <div className="text-[#211A1A] font-bold mb-1">No slides generated yet</div>
+                    <div className="text-[#5C4E4E] text-sm max-w-xs font-medium">
                       Upload an audio recording, record your voice, or paste a transcript — then click{" "}
-                      <span className="text-purple-400">Generate Slides</span>
+                      <span className="text-[#6D28D9] font-bold">Generate Slides</span>
                     </div>
                   </div>
                 </div>
@@ -834,17 +813,17 @@ export default function InteractiveDemo() {
                   >
                     {/* Presentation Title Banner */}
                     {presentationTitle && (
-                      <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-3 mb-3">
-                        <div className="text-white font-bold text-base">{presentationTitle}</div>
+                      <div className="bg-[#EDE3FF]/60 border border-[#6D28D9]/15 rounded-2xl p-4 mb-3">
+                        <div className="text-[#211A1A] font-bold text-base">{presentationTitle}</div>
                         {presentationSubtitle && (
-                          <div className="text-gray-400 text-xs mt-0.5">{presentationSubtitle}</div>
+                          <div className="text-[#5C4E4E] text-xs mt-0.5 font-medium">{presentationSubtitle}</div>
                         )}
                         {agenda.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mt-2">
                             {agenda.map((item, idx) => (
                               <span
                                 key={idx}
-                                className="px-2 py-0.5 rounded bg-white/10 text-gray-300 text-[10px]"
+                                className="px-2.5 py-0.5 rounded-full bg-white border border-[#6D28D9]/10 text-[#211A1A] text-[10px] font-medium shadow-sm"
                               >
                                 {item}
                               </span>
@@ -860,10 +839,10 @@ export default function InteractiveDemo() {
                         <button
                           key={slide.id}
                           onClick={() => setActiveSlide(i)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                          className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                             activeSlide === i
-                              ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
-                              : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10"
+                              ? "bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] text-white shadow-md"
+                              : "bg-white border border-[#6D28D9]/10 text-[#5C4E4E] hover:text-[#211A1A] hover:bg-[#EDE3FF]/40"
                           }`}
                         >
                           Slide {i + 1}
@@ -889,9 +868,7 @@ export default function InteractiveDemo() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.25 }}
-                        className={`relative bg-gradient-to-br ${
-                          slides[activeSlide]?.gradient || "from-purple-600 to-blue-600"
-                        } rounded-2xl p-6 overflow-hidden shadow-2xl`}
+                        className="relative bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] rounded-3xl p-6 overflow-hidden shadow-xl"
                       >
                         <div className="absolute inset-0 opacity-10">
                           <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-white blur-2xl" />
@@ -903,7 +880,7 @@ export default function InteractiveDemo() {
                             {slides[activeSlide]?.title}
                           </h3>
                           {slides[activeSlide]?.subtitle && (
-                            <p className="text-white/80 text-xs mb-3 italic">
+                            <p className="text-white/90 text-xs mb-3 italic font-medium">
                               {slides[activeSlide]?.subtitle}
                             </p>
                           )}
@@ -914,9 +891,9 @@ export default function InteractiveDemo() {
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: i * 0.08 }}
-                                className="flex items-start gap-2 text-white/90 text-sm"
+                                className="flex items-start gap-2 text-white text-sm font-medium"
                               >
-                                <span className="w-1.5 h-1.5 rounded-full bg-white/60 flex-shrink-0 mt-1.5" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0 mt-1.5" />
                                 {bullet}
                               </motion.li>
                             ))}
@@ -924,8 +901,8 @@ export default function InteractiveDemo() {
 
                           {/* Speaker Notes */}
                           {slides[activeSlide]?.speakerNotes && (
-                            <div className="mt-4 pt-3 border-t border-white/20 text-xs text-white/70 italic">
-                              <span className="font-semibold text-white/90">🎙️ Speaker Notes: </span>
+                            <div className="mt-4 pt-3 border-t border-white/20 text-xs text-white/80 italic">
+                              <span className="font-semibold text-white">🎙️ Speaker Notes: </span>
                               {slides[activeSlide]?.speakerNotes}
                             </div>
                           )}
@@ -942,18 +919,18 @@ export default function InteractiveDemo() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: i * 0.06 }}
                           onClick={() => setActiveSlide(i)}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all cursor-pointer ${
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition-all cursor-pointer ${
                             activeSlide === i
-                              ? "bg-purple-500/20 border border-purple-500/40"
-                              : "hover:bg-white/5 border border-transparent"
+                              ? "bg-[#EDE3FF] border border-[#6D28D9]/20"
+                              : "hover:bg-[#FFF8E8] border border-transparent"
                           }`}
                         >
                           <span className="text-lg">{slide.icon}</span>
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-white truncate">
+                            <div className="text-sm font-bold text-[#211A1A] truncate">
                               {slide.title}
                             </div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-[#5C4E4E] font-medium">
                               {slide.bullets.length} bullet points
                             </div>
                           </div>
@@ -965,18 +942,18 @@ export default function InteractiveDemo() {
                             />
                           </div>
                           {activeSlide === i && (
-                            <CheckCircle2 className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-[#6D28D9] flex-shrink-0" />
                           )}
                         </motion.div>
                       ))}
                     </div>
 
                     {/* Export Row */}
-                    <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
+                    <div className="flex gap-2 mt-4 pt-4 border-t border-[#6D28D9]/10">
                       <button
                         onClick={handleDownloadPptx}
                         disabled={isDownloadingPpt || slides.length === 0}
-                        className="flex-1 py-2.5 rounded-xl border border-purple-500/40 hover:border-purple-500/80 text-purple-300 hover:text-purple-200 text-xs font-medium transition-all hover:bg-purple-500/10 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                        className="flex-1 py-3 rounded-full border border-[#6D28D9]/20 hover:border-[#6D28D9]/40 text-[#6D28D9] bg-[#EDE3FF] hover:bg-[#EDE3FF]/80 text-xs font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer shadow-sm"
                       >
                         {isDownloadingPpt ? (
                           <>
@@ -989,7 +966,7 @@ export default function InteractiveDemo() {
                       <button
                         onClick={handleCopyPptLink}
                         disabled={slides.length === 0}
-                        className="flex-1 py-2.5 rounded-xl border border-blue-500/40 hover:border-blue-500/80 text-blue-300 hover:text-blue-200 text-xs font-medium transition-all hover:bg-blue-500/10 cursor-pointer disabled:opacity-50"
+                        className="flex-1 py-3 rounded-full border border-[#6D28D9]/15 hover:border-[#6D28D9]/40 text-[#211A1A] bg-white hover:bg-[#FFF8E8] text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-sm"
                       >
                         🔗 Copy PPT Link
                       </button>
@@ -1001,12 +978,6 @@ export default function InteractiveDemo() {
           </motion.div>
         </div>
       </div>
-
-      <X402PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onPaymentSuccess={handlePaymentSuccess}
-      />
     </section>
   );
 }

@@ -72,7 +72,7 @@ export const pricingPlans: PricingPlan[] = [
       "API access",
       "Analytics dashboard",
       "Encrypted API endpoints",
-      "Algorand blockchain payments",
+      "Enterprise security & compliance",
       "Dedicated account manager",
     ],
     cta: "Start Pro Trial",
@@ -145,9 +145,9 @@ export const faqs: FAQ[] = [
   },
   {
     id: 3,
-    question: "How does API payment protection work?",
+    question: "How is my data secured?",
     answer:
-      "VoiceDeck AI uses secure API authentication protocols that enable pay-per-use access to APIs via Algorand blockchain micropayments. This ensures secure, transparent, and decentralized billing for each generation request.",
+      "VoiceDeck AI uses enterprise-grade encryption and secure token authentication to protect your recordings, transcripts, and generated slides.",
   },
   {
     id: 4,
@@ -303,7 +303,7 @@ export const features: Feature[] = [
     id: 8,
     title: "Secure API Protection",
     description:
-      "APIs secured with enterprise payment protocols on Algorand blockchain for pay-per-use billing.",
+      "APIs secured with enterprise-grade encryption and token authentication for safe integration.",
     icon: "Shield",
     gradient: "from-purple-500/20 to-pink-600/10",
   },

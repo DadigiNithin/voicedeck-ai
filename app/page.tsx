@@ -4,8 +4,6 @@ import FeaturesSection from "@/components/FeaturesSection";
 import HowItWorks from "@/components/HowItWorks";
 import InteractiveDemo from "@/components/InteractiveDemo";
 import Timeline from "@/components/Timeline";
-import PricingSection from "@/components/PricingSection";
-import X402Section from "@/components/X402Section";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import CTABanner from "@/components/CTABanner";
@@ -13,7 +11,7 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black overflow-x-hidden">
+    <main className="min-h-screen bg-[#FFF8E8] text-[#211A1A] overflow-x-hidden">
       {/* Sticky Navigation */}
       <Navbar />
 
@@ -31,12 +29,6 @@ export default function Home() {
 
       {/* AI Workflow Timeline */}
       <Timeline />
-
-      {/* Security & Payment Protocol */}
-      <X402Section />
-
-      {/* Pricing */}
-      <PricingSection />
 
       {/* Testimonials */}
       <Testimonials />

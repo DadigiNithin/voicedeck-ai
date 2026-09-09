@@ -5,13 +5,18 @@ if (typeof (Array.prototype as any).toSorted !== "function") {
 }
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { AppWalletProvider } from "@/components/providers/WalletProvider";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
   display: "swap",
 });
 
@@ -24,8 +29,6 @@ export const metadata: Metadata = {
     "voice to slides",
     "meeting transcript to slides",
     "AI slide deck",
-    "Algorand",
-    "BlockHack",
   ],
   authors: [{ name: "VoiceDeck AI" }],
   openGraph: {
@@ -43,8 +46,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} font-sans antialiased bg-black text-white`}>
-        <AppWalletProvider>{children}</AppWalletProvider>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased bg-[#FFF8E8] text-[#211A1A]`}>
+        {children}
       </body>
     </html>
   );

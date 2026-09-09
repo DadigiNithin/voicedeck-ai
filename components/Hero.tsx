@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mic, Play, ArrowRight, Sparkles, Zap } from "lucide-react";
+import { Mic, Play, ArrowUpRight, Sparkles, Zap, ShieldCheck } from "lucide-react";
 
 const floatingAnimate = {
   y: [-8, 8, -8],
@@ -13,10 +13,10 @@ const floatingAnimate = {
 };
 
 const orbAnimate = {
-  scale: [1, 1.2, 1],
-  opacity: [0.3, 0.6, 0.3],
+  scale: [1, 1.15, 1],
+  opacity: [0.35, 0.65, 0.35],
   transition: {
-    duration: 4,
+    duration: 5,
     repeat: Infinity,
     ease: "easeInOut" as const,
   },
@@ -28,39 +28,36 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Background Effects */}
+    <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden pt-24 pb-16">
+      {/* Ambient Radial Background Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Primary glow */}
         <motion.div
           animate={orbAnimate}
-          className="absolute top-1/4 left-1/3 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-purple-600/20 to-blue-600/20 blur-3xl"
+          className="absolute top-1/4 left-1/4 w-[650px] h-[650px] rounded-full bg-gradient-to-r from-[#F7D9C4]/35 via-[#EDE3FF]/30 to-[#7C3AED]/15 blur-[140px]"
         />
         <motion.div
           animate={orbAnimate}
-          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-gradient-to-r from-blue-600/15 to-violet-600/15 blur-3xl"
+          className="absolute bottom-10 right-1/4 w-[450px] h-[450px] rounded-full bg-gradient-to-r from-[#7C3AED]/15 to-[#F7D9C4]/35 blur-[130px]"
         />
-        {/* Grid overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        {/* Radial vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,119,198,0.15),transparent)]" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col lg:flex-row items-center gap-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex flex-col lg:flex-row items-center gap-14 z-10">
         {/* Left Content */}
         <div className="flex-1 text-center lg:text-left">
-          {/* Heading */}
+          {/* Soft Lavender Category Pill */}
+
+
+          {/* Oversized Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-[1.1] tracking-tight mb-6"
+            className="font-display text-4xl sm:text-6xl lg:text-6xl xl:text-7xl font-black text-[#211A1A] leading-[1.05] tracking-tight uppercase mb-6"
           >
-            Convert Meetings into{" "}
-            <span className="bg-gradient-to-r from-purple-400 via-violet-400 to-blue-400 bg-clip-text text-transparent">
-              Presentation Slides
-            </span>{" "}
-            using AI
+            TURN AUDIO & TRANSCRIPTS INTO{" "}
+            <span className="block mt-1 bg-gradient-to-r from-[#35115F] via-[#6D28D9] to-[#7C3AED] bg-clip-text text-transparent font-black">
+              HIGH-IMPACT SLIDES
+            </span>
           </motion.h1>
 
           {/* Subheading */}
@@ -68,15 +65,12 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg sm:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-10"
+            className="text-base sm:text-lg text-[#5C4E4E] leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-8 font-sans font-medium"
           >
-            Upload an audio recording or paste a transcript and instantly
-            generate an{" "}
-            <span className="text-white font-medium">investor-ready presentation</span>.
-            Powered by advanced speech-to-text & slide synthesis.
+            Turn recordings and transcripts into polished, presentation-ready slides in seconds.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -84,179 +78,171 @@ export default function Hero() {
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
             <motion.button
-              whileHover={{ scale: 1.04, boxShadow: "0 0 40px rgba(139,92,246,0.4)" }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.04, boxShadow: "0 0 35px rgba(124,58,237,0.35)" }}
+              whileTap={{ scale: 0.96 }}
               onClick={scrollToDemo}
-              className="px-8 py-4 font-bold text-white rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-2xl shadow-purple-500/30 transition-all flex items-center justify-center gap-2 text-base"
+              className="px-8 py-4 font-display font-bold uppercase tracking-wider text-white rounded-full bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] hover:from-[#35115F] hover:to-[#6D28D9] shadow-xl shadow-[#6D28D9]/25 transition-all flex items-center justify-center gap-2.5 text-sm cursor-pointer"
             >
-              <Zap className="w-5 h-5" />
-              Generate Slides
-              <ArrowRight className="w-4 h-4" />
+              <Zap className="w-4 h-4 fill-current text-[#EDE3FF]" />
+              GENERATE SLIDES NOW
+              <ArrowUpRight className="w-4 h-4" />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
+              whileTap={{ scale: 0.96 }}
               onClick={scrollToDemo}
-              className="px-8 py-4 font-semibold text-white rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-all flex items-center justify-center gap-2 text-base"
+              className="px-8 py-4 font-display font-bold uppercase tracking-wider text-[#211A1A] hover:text-[#6D28D9] rounded-full border border-[#6D28D9]/15 bg-[#FFFDF7] hover:bg-white backdrop-blur-md shadow-sm transition-all flex items-center justify-center gap-2 text-sm cursor-pointer"
             >
-              <Play className="w-4 h-4 fill-current" />
-              Watch Demo
+              <Play className="w-4 h-4 fill-current text-[#7C3AED]" />
+              WATCH DEMO
             </motion.button>
           </motion.div>
 
-          {/* Stats */}
+          {/* Badges / Stats Bar */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex flex-wrap gap-8 justify-center lg:justify-start mt-12"
+            className="grid grid-cols-3 gap-3 max-w-lg mx-auto lg:mx-0 mt-10 pt-8 border-t border-[#6D28D9]/10"
           >
             {[
-              { label: "Slides Generated", value: "50K+" },
-              { label: "Time Saved", value: "200hrs+" },
-              { label: "Accuracy Rate", value: "95%" },
+              { label: "SLIDES GENERATED", value: "50K+" },
+              { label: "TIME SAVED", value: "200 HRS+" },
+              { label: "AI ACCURACY", value: "95%" },
             ].map((stat) => (
-              <div key={stat.label} className="text-center lg:text-left">
-                <div className="text-2xl font-bold text-white">{stat.value}</div>
-                <div className="text-sm text-gray-500">{stat.label}</div>
+              <div key={stat.label} className="p-3.5 rounded-2xl bg-[#FFFDF7] border border-[#6D28D9]/10 text-center lg:text-left shadow-sm">
+                <div className="font-display font-black text-xl text-[#35115F] tracking-tight">{stat.value}</div>
+                <div className="text-[10px] font-mono tracking-widest text-[#5C4E4E] uppercase mt-0.5">{stat.label}</div>
               </div>
             ))}
           </motion.div>
         </div>
 
-        {/* Right Illustration */}
-        <div className="flex-1 flex justify-center lg:justify-end">
+        {/* Right Interactive Mockup Card */}
+        <div className="flex-1 flex justify-center lg:justify-end w-full">
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative w-full max-w-lg"
           >
-            {/* Main card */}
+            {/* Organic Card Container (#FFFDF7 Soft White Surface) */}
             <motion.div
               animate={floatingAnimate}
-              className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl"
+              className="relative bg-[#FFFDF7] backdrop-blur-2xl border border-[#6D28D9]/15 rounded-3xl p-7 shadow-2xl overflow-hidden"
             >
               {/* Header */}
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center shadow-lg">
-                  <Mic className="w-5 h-5 text-white" />
+              <div className="flex items-center justify-between pb-4 mb-5 border-b border-[#6D28D9]/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-2xl bg-[#EDE3FF] text-[#6D28D9] font-mono font-bold text-xs flex items-center justify-center">
+                    01
+                  </div>
+                  <div>
+                    <div className="font-display font-bold text-[#35115F] text-xs uppercase tracking-wider">VOICEDECK AI STUDIO</div>
+
+                  </div>
                 </div>
-                <div>
-                  <div className="text-white font-semibold text-sm">VoiceDeck AI</div>
-                  <div className="text-gray-400 text-xs">Processing audio...</div>
-                </div>
-                <div className="ml-auto flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-green-400 text-xs font-medium">Live</span>
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EDE3FF] border border-[#6D28D9]/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#6D28D9] animate-pulse" />
+                  <span className="text-[#35115F] font-mono text-[10px] font-bold uppercase tracking-wider">LIVE RECORD</span>
                 </div>
               </div>
 
-              {/* Waveform visualization */}
-              <div className="flex items-end gap-1 h-12 mb-5">
-                {Array.from({ length: 32 }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    animate={{
-                      height: [
-                        `${20 + Math.random() * 60}%`,
-                        `${20 + Math.random() * 60}%`,
-                        `${20 + Math.random() * 60}%`,
-                      ],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      delay: i * 0.05,
-                      ease: "easeInOut",
-                    }}
-                    className="flex-1 rounded-full bg-gradient-to-t from-purple-600 to-blue-400 opacity-80"
-                  />
-                ))}
+              {/* Dynamic Audio Waveform */}
+              <div className="mb-5 p-4 rounded-2xl bg-[#FFF8E8] border border-[#6D28D9]/10">
+                <div className="flex items-center justify-between text-[11px] font-mono text-[#5C4E4E] mb-3">
+                  <span>AUDIO SPECTRUM // 48kHz</span>
+                  <span className="text-[#6D28D9] font-bold">ANALYZING...</span>
+                </div>
+                <div className="flex items-end gap-1.5 h-14">
+                  {Array.from({ length: 28 }).map((_, i) => (
+                    <motion.div
+                      key={i}
+                      animate={{
+                        height: [
+                          `${25 + Math.random() * 65}%`,
+                          `${25 + Math.random() * 65}%`,
+                          `${25 + Math.random() * 65}%`,
+                        ],
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        delay: i * 0.04,
+                        ease: "easeInOut",
+                      }}
+                      className="flex-1 rounded-full bg-gradient-to-t from-[#6D28D9] to-[#7C3AED]"
+                    />
+                  ))}
+                </div>
               </div>
 
-              {/* Progress */}
-              <div className="mb-4">
-                <div className="flex justify-between text-xs text-gray-400 mb-1.5">
-                  <span>Analyzing...</span>
-                  <span>78%</span>
+              {/* Live Slide Generation Progress */}
+              <div className="space-y-2.5">
+                <div className="flex justify-between text-xs font-mono text-[#5C4E4E]">
+                  <span>GENERATING DECK...</span>
+                  <span className="text-[#35115F] font-bold">84% COMPLETE</span>
                 </div>
-                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-black/5 rounded-full overflow-hidden p-0.5 border border-[#6D28D9]/10">
                   <motion.div
                     initial={{ width: "0%" }}
-                    animate={{ width: "78%" }}
-                    transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-                    className="h-full rounded-full bg-gradient-to-r from-purple-500 to-blue-500"
+                    animate={{ width: "84%" }}
+                    transition={{ duration: 2, delay: 0.4, ease: "easeOut" }}
+                    className="h-full rounded-full bg-gradient-to-r from-[#6D28D9] to-[#7C3AED]"
                   />
                 </div>
-              </div>
 
-              {/* Generated slides preview */}
-              <div className="space-y-2">
-                {[
-                  "Q3 Business Review",
-                  "Revenue Growth +34%",
-                  "Hiring Plan 2024",
-                ].map((title, i) => (
-                  <motion.div
-                    key={title}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 + i * 0.2 }}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gradient-to-r from-purple-600/10 to-blue-600/10 border border-purple-500/20"
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
-                    <span className="text-sm text-gray-200 font-medium">{title}</span>
-                    <div className="ml-auto">
-                      <div className="w-12 h-1 rounded-full bg-gradient-to-r from-purple-500/40 to-blue-500/40" />
-                    </div>
-                  </motion.div>
-                ))}
+                {/* Generated Slide Preview Items */}
+                <div className="space-y-2 pt-2">
+                  {[
+                    "01 // EXECUTIVE SUMMARY & METRICS",
+                    "02 // MARKET STRATEGY & ROADMAP",
+                    "03 // FINANCIAL PROJECTIONS 2025",
+                  ].map((title, idx) => (
+                    <motion.div
+                      key={title}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5 + idx * 0.15 }}
+                      className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-white border border-[#6D28D9]/10 hover:border-[#7C3AED]/40 transition-colors shadow-sm"
+                    >
+                      <span className="text-xs font-mono text-[#211A1A] font-medium">{title}</span>
+                      <span className="text-[10px] font-mono text-[#6D28D9] font-bold bg-[#EDE3FF] px-2.5 py-0.5 rounded-full">READY</span>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </motion.div>
 
-            {/* Floating badges */}
+            {/* Floating Soft Peach Accent Pill Badge 1 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="absolute -bottom-6 -left-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl px-4 py-2.5 shadow-xl"
+              className="absolute -bottom-5 -left-5 bg-[#FFFDF7] backdrop-blur-xl border border-[#6D28D9]/15 rounded-2xl p-3.5 shadow-xl flex items-center gap-3"
             >
-              <div className="text-xs text-gray-400">Slides Generated</div>
-              <div className="text-lg font-bold text-white">6 Slides ✨</div>
+              <div className="w-9 h-9 rounded-xl bg-[#F7D9C4] flex items-center justify-center text-[#35115F] shadow-sm">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="text-[10px] font-mono text-[#5C4E4E] uppercase">AI SYNTHESIS</div>
+                <div className="font-display font-bold text-xs text-[#35115F]">6 SLIDES READY </div>
+              </div>
             </motion.div>
 
+            {/* Floating Violet Badge 2 */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="absolute -top-4 -right-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl px-3 py-2 shadow-xl"
+              transition={{ delay: 0.9 }}
+              className="absolute -top-4 -right-4 bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] rounded-full px-4 py-2 shadow-lg flex items-center gap-2"
             >
-              <div className="text-xs text-white/80">Smart & Fast</div>
-              <div className="text-sm font-bold text-white flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" /> Fast & Secure
-              </div>
+              <ShieldCheck className="w-4 h-4 text-white" />
+              <span className="text-xs font-display font-bold text-white uppercase tracking-wider">PPTX & PDF</span>
             </motion.div>
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <span className="text-gray-500 text-xs tracking-widest uppercase">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-4 h-7 rounded-full border-2 border-gray-600 flex items-start justify-center pt-1.5"
-        >
-          <div className="w-1 h-2 rounded-full bg-gray-400" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }

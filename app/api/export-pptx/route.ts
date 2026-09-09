@@ -23,11 +23,11 @@ export async function GET(request: NextRequest) {
         {
           id: 1,
           title: "VoiceDeck AI Executive Overview",
-          subtitle: "AI Speech-to-Slide Synthesis & Web3 Micropayments",
+          subtitle: "AI Speech-to-Slide Synthesis",
           bullets: [
             "Instant conversion of spoken audio transcripts into structured slide decks.",
             "Powered by Gemini 2.5 LLM models for high-accuracy content synthesis.",
-            "x402 Protocol integration for seamless Algorand TestNet micropayments.",
+            "Enterprise cloud integration with secure API access.",
             "Professional PowerPoint export featuring Times New Roman typography and slide reference graphics."
           ],
           speakerNotes: "Welcome to VoiceDeck AI presentation deck.",

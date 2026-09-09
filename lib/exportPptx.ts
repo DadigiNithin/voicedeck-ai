@@ -37,15 +37,6 @@ function getSlideReferenceImageSVG(slide: Slide, index: number): string {
       <path d="M100 150 L100 130 M120 170 L120 110 M140 190 L140 90 M160 210 L160 70 M180 230 L180 50 M200 210 L200 70 M220 190 L220 90 M240 170 L240 110 M260 150 L260 130" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
       <circle cx="180" cy="140" r="75" stroke="${primaryColor}" stroke-width="2.5" fill="none" opacity="0.5"/>
     `;
-  } else if (textLower.includes("algo") || textLower.includes("payment") || textLower.includes("blockchain") || textLower.includes("wallet")) {
-    headerTitle = "ALGORAND x402 PROTOCOL";
-    primaryColor = "#10B981";
-    secondaryColor = "#3B82F6";
-    iconSvg = `
-      <polygon points="180,40 260,85 260,175 180,220 100,175 100,85" fill="none" stroke="${primaryColor}" stroke-width="3.5"/>
-      <polygon points="180,65 235,95 235,165 180,195 125,165 125,95" fill="${primaryColor}" opacity="0.2" stroke="${secondaryColor}" stroke-width="2"/>
-      <text x="180" y="138" font-family="Times New Roman" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ALGO</text>
-    `;
   } else if (textLower.includes("slide") || textLower.includes("format") || textLower.includes("deck") || textLower.includes("present") || textLower.includes("course") || textLower.includes("academic")) {
     headerTitle = "ACADEMIC &amp; AI ARCHITECTURE";
     primaryColor = "#F59E0B";
